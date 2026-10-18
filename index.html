@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>배터리 전극 4대 공정 마스터 클래스 | 코터 오븐 · 믹싱 · 롤프레스 · 슬리팅</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <style>
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+    .gradient-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f766e 100%);
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #2563eb 0%, #0d9488 100%);
+      color: #ffffff;
+      box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.35);
+      border-color: transparent;
+    }
+    .card-hover {
+      transition: all 0.2s ease-in-out;
+    }
+    .card-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.12);
+    }
+    mark.highlight {
+      background-color: #fef08a;
+      color: #854d0e;
+      padding: 0 3px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      .lecture-section { display: block !important; page-break-after: always; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Top Hero Header -->
+  <header class="gradient-header text-white py-10 px-6 shadow-xl relative overflow-hidden">
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-300/30 text-blue-200 text-xs font-semibold mb-3">
+            <span>⚡ 이차전지 전극 공정(Electrode Process) 현장 실무 특강</span>
+            <span>|</span>
+            <span>Version 1.0 (26.10.18)</span>
+          </div>
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
+            배터리 전극 4대 공정 핵심 마스터 클래스
+          </h1>
+          <p class="mt-2 text-slate-200 text-sm md:text-base max-w-3xl">
+            전극 코터(Coater) 전문가 시각에서 해부하는 <strong>오븐 건조(FIR vs 대류) · 믹싱(Mixing) · 롤프레스(Calendering) · 슬리팅(Slitting)</strong>의 핵심 물리 현상, 제어 변수 및 치명적 불량 트러블슈팅 가이드
+          </p>
+        </div>
+        <div class="flex items-center gap-3 no-print">
+          <button onclick="expandAllAndPrint()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-sm font-semibold backdrop-blur transition flex items-center gap-2">
+            <span>🖨️ 전체 강의 인쇄 / PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Process Pipeline Mini KPI Bar -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
+        <div onclick="switchTab('lec2')" class="cursor-pointer bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl p-3.5 backdrop-blur transition">
+          <div class="text-xs text-teal-300 font-bold">STEP 01. 믹싱 (Mixing)</div>
+          <div class="text-base font-bold mt-0.5">고점도 혼련 & 분산</div>
+          <div class="text-xs text-slate-300 mt-1">Kneading · 겔화 방지 · SBR 후투입</div>
+        </div>
+        <div onclick="switchTab('lec1')" class="cursor-pointer bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl p-3.5 backdrop-blur transition">
+          <div class="text-xs text-amber-300 font-bold">STEP 02. 코팅/오븐 (Drying)</div>
+          <div class="text-base font-bold mt-0.5">FIR 복사 & 대류 프로파일</div>
+          <div class="text-xs text-slate-300 mt-1">바인더 마이그레이션 억제 · 플로팅</div>
+        </div>
+        <div onclick="switchTab('lec3')" class="cursor-pointer bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl p-3.5 backdrop-blur transition">
+          <div class="text-xs text-blue-300 font-bold">STEP 03. 롤프레스 (Press)</div>
+          <div class="text-base font-bold mt-0.5">합제밀도 & 연신 밸런스</div>
+          <div class="text-xs text-slate-300 mt-1">스프링백 · 크라운/벤더 · 웨이브</div>
+        </div>
+        <div onclick="switchTab('lec4')" class="cursor-pointer bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl p-3.5 backdrop-blur transition">
+          <div class="text-xs text-rose-300 font-bold">STEP 04. 슬리팅 (Slitting)</div>
+          <div class="text-base font-bold mt-0.5">무결점 전단 & 테이퍼 텐션</div>
+          <div class="text-xs text-slate-300 mt-1">Burr ≤ 5~10μm · 차동축 권취</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Navigation & Search Bar -->
+  <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-2" id="tab-buttons">
+        <button data-tab="overview" onclick="switchTab('overview')" class="tab-btn active px-4 py-2 rounded-xl text-sm font-bold border border-slate-200 text-slate-700 hover:bg-slate-100 transition">
+          📊 한눈에 보는 4대 공정 요약
+        </button>
+        <button data-tab="lec1" onclick="switchTab('lec1')" class="tab-btn px-4 py-2 rounded-xl text-sm font-bold border border-slate-200 text-slate-700 hover:bg-slate-100 transition">
+          🔥 제1강: 오븐 구조 (FIR vs 대류)
+        </button>
+        <button data-tab="lec2" onclick="switchTab('lec2')" class="tab-btn px-4 py-2 rounded-xl text-sm font-bold border border-slate-200 text-slate-700 hover:bg-slate-100 transition">
+          🥣 제2강: 믹싱 공정 핵심
+        </button>
+        <button data-tab="lec3" onclick="switchTab('lec3')" class="tab-btn px-4 py-2 rounded-xl text-sm font-bold border border-slate-200 text-slate-700 hover:bg-slate-100 transition">
+          ⚙️ 제3강: 롤프레스 공정 핵심
+        </button>
+        <button data-tab="lec4" onclick="switchTab('lec4')" class="tab-btn px-4 py-2 rounded-xl text-sm font-bold border border-slate-200 text-slate-700 hover:bg-slate-100 transition">
+          🔪 제4강: 슬리팅 공정 핵심
+        </button>
+        <button data-tab="quiz" onclick="switchTab('quiz')" class="tab-btn px-4 py-2 rounded-xl text-sm font-bold border border-slate-200 text-slate-700 hover:bg-slate-100 transition">
+          ✅ 실무 트러블슈팅 진단 & 퀴즈
+        </button>
+      </div>
+
+      <!-- Search Box -->
+      <div class="relative w-full sm:w-64">
+        <input
+          id="searchInput"
+          type="text"
+          oninput="handleSearch(this.value)"
+          placeholder="키워드 검색 (예: FIR, 마이그레이션, Burr)..."
+          class="w-full pl-9 pr-4 py-2 text-sm bg-slate-100 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
+        />
+        <span class="absolute left-3 top-2.5 text-slate-400 text-sm">🔍</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full" id="content-area">
+
+    <!-- ==================== TAB 0: OVERVIEW ==================== -->
+    <section id="tab-overview" class="lecture-section space-y-8">
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Executive Summary</span>
+            <h2 class="text-2xl font-extrabold text-slate-900 mt-2">배터리 전극 4대 공정 한눈에 마스터하기</h2>
+            <p class="text-slate-600 text-sm mt-1">
+              전극 공정(믹싱 → 코팅/건조 → 롤프레스 → 슬리팅)은 앞 공정의 산출물이 뒷 공정의 입력이 되는 연속(Roll-to-Roll) 유기체입니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- Master Pipeline Mermaid -->
+        <div class="my-6 bg-slate-50 p-4 rounded-xl border border-slate-200 overflow-x-auto">
+          <div class="mermaid">
+flowchart LR
+    M["<b>[1] 믹싱 (Mixing)</b><br/>고점도 혼련(Kneading)<br/>도전재/활물질 균일 분산"] 
+    --> C["<b>[2] 코팅 & 오븐 건조</b><br/>FIR(초기 승온) + 대류 열풍<br/>바인더 마이그레이션 억제"]
+    --> P["<b>[3] 롤프레스 (Calendering)</b><br/>기공률 50% → 25% 압축<br/>승온 프레스 & 크라운 제어"]
+    --> S["<b>[4] 슬리팅 (Slitting)</b><br/>Rotary Shear Cut (Burr 억제)<br/>프리크션 축 & 테이퍼 텐션"]
+          </div>
+        </div>
+
+        <!-- Summary Comparison Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="bg-slate-900 text-white">
+                <th class="p-3.5 rounded-tl-xl">공정 구분</th>
+                <th class="p-3.5">핵심 엔지니어링 미션</th>
+                <th class="p-3.5">가장 치명적인 불량 (Defect)</th>
+                <th class="p-3.5">엔지니어의 핵심 무기 (Key Control Parameters)</th>
+                <th class="p-3.5 rounded-tr-xl">상세 강의</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr class="hover:bg-blue-50/40 transition">
+                <td class="p-4 font-bold text-amber-700 bg-amber-50/50">🔥 코터 오븐<br/><span class="text-xs font-normal text-slate-500">(제1강)</span></td>
+                <td class="p-4 font-medium">용매(NMP/물) 증발 및<br/>전극 미세구조 고정(Fixing)</td>
+                <td class="p-4 text-rose-600 font-semibold">• 바인더 마이그레이션 (박리)<br/>• 표면 피막(Skinning) & 핀홀<br/>• 플로팅 노즐 터치/스크래치</td>
+                <td class="p-4">• <strong>FIR(원적외선)</strong> 초기 내부 승온 부스팅<br/>• <strong>항률 건조 구간</strong> 온도/풍속 제어<br/>• 플로팅 상/하부 노즐 풍압 밸런스 & LEL 관리</td>
+                <td class="p-4"><button onclick="switchTab('lec1')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700">1강 보기 →</button></td>
+              </tr>
+              <tr class="hover:bg-blue-50/40 transition">
+                <td class="p-4 font-bold text-teal-700 bg-teal-50/50">🥣 믹싱 공정<br/><span class="text-xs font-normal text-slate-500">(제2강)</span></td>
+                <td class="p-4 font-medium">응집체(Agglomerate) 파괴 및<br/>침강 없는 분산 안정성 확보</td>
+                <td class="p-4 text-rose-600 font-semibold">• 양극 슬러리 겔화 (Gelation)<br/>• 음극 SBR 고무 입자 파괴<br/>• 거대 입자 줄무늬 & 기포 핀홀</td>
+                <td class="p-4">• <strong>고점도 혼련(Kneading)</strong> 전단력 극대화<br/>• 양극 수분 차단 / <strong>음극 SBR 맨 마지막 저속 투입</strong><br/>• 고형분, 전단박화(요변성) 점도, 진공 탈포/필터</td>
+                <td class="p-4"><button onclick="switchTab('lec2')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700">2강 보기 →</button></td>
+              </tr>
+              <tr class="hover:bg-blue-50/40 transition">
+                <td class="p-4 font-bold text-blue-700 bg-blue-50/50">⚙️ 롤프레스<br/><span class="text-xs font-normal text-slate-500">(제3강)</span></td>
+                <td class="p-4 font-medium">목표 합제밀도($g/cm^3$) 달성 및<br/>폭/길이 방향 두께 균일화</td>
+                <td class="p-4 text-rose-600 font-semibold">• 과압연 활물질 깨짐 & 기공 막힘<br/>• 스프링백 (탄성 복원)<br/>• 무지부 웨이브(Wave) & 캠버</td>
+                <td class="p-4">• <strong>승온 프레스(Hot Press)</strong>로 바인더 연화<br/>• <strong>크라운 롤 & 유압 벤더</strong>로 롤 휨(Bending) 상쇄<br/>• 무지부 가열/연신기로 코팅부-무지부 연신차 해소</td>
+                <td class="p-4"><button onclick="switchTab('lec3')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700">3강 보기 →</button></td>
+              </tr>
+              <tr class="hover:bg-blue-50/40 transition">
+                <td class="p-4 font-bold text-rose-700 bg-rose-50/50">🔪 슬리팅<br/><span class="text-xs font-normal text-slate-500">(제4강)</span></td>
+                <td class="p-4 font-medium">무결점 절단면 확보 및<br/>다열(Multi-lane) 균일 권취</td>
+                <td class="p-4 text-rose-600 font-semibold">• <strong>금속 버(Burr) → 분리막 관통/화재</strong><br/>• 절단면 크랙(Chipping) & 분진<br/>• 죽순 현상(Telescoping) & 스타 디펙트</td>
+                <td class="p-4">• Rotary Shear 나이프 <strong>오버랩 / 측압 / 캔트 앵글</strong><br/>• <strong>프리크션 샤프트(차동축)</strong>로 레인별 편차 흡수<br/>• <strong>테이퍼 텐션(Taper Tension)</strong>으로 외권부 장력 감소</td>
+                <td class="p-4"><button onclick="switchTab('lec4')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700">4강 보기 →</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Cards Grid -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 card-hover">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-amber-600 text-white text-xs font-bold">핵심 질문 1</span>
+            <span class="text-2xl">🌡️</span>
+          </div>
+          <h3 class="text-lg font-extrabold text-slate-900 mt-3">오븐에서 FIR(원적외선)과 대류(열풍)의 역할 차이는?</h3>
+          <p class="text-sm text-slate-700 mt-2 leading-relaxed">
+            <strong>대류(열풍)</strong>는 코팅 <u>표면에서 내부로</u> 열을 전달하고 증발된 용매 가스를 배기하지만, 초반부터 세게 불면 풍자국(Air mark)과 표면 피막, 바인더 마이그레이션을 유발합니다.<br/>
+            반면 <strong>FIR(원적외선, 파장 3~100μm)</strong>은 용매(물/NMP) 분자 고유 흡수 파장과 공명하여 바람 없이도 <u>코팅층 내부와 표면을 동시에 순식간에 승온(Boosting)</u>시킵니다.
+          </p>
+          <button onclick="switchTab('lec1')" class="mt-4 text-xs font-bold text-amber-800 hover:underline">→ 제1강에서 오븐 Zone별 온도 프로파일 자세히 보기</button>
+        </div>
+
+        <div class="bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-200 rounded-2xl p-6 card-hover">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-rose-600 text-white text-xs font-bold">핵심 질문 2</span>
+            <span class="text-2xl">⚡</span>
+          </div>
+          <h3 class="text-lg font-extrabold text-slate-900 mt-3">왜 슬리팅 Burr(가시) 10μm 하나에 배터리 공장이 비상인가?</h3>
+          <p class="text-sm text-slate-700 mt-2 leading-relaxed">
+            양극과 음극을 절연하는 <strong>분리막(Separator)의 두께는 불과 10~15μm</strong>입니다. 슬리팅 칼날 세팅(오버랩/측압) 불량이나 마모로 절단면에 15μm짜리 뾰족한 금속 Burr가 생기면 분리막을 그대로 찔러 관통하여 <strong>내부 단락(Internal Short) 및 열폭주 화재</strong>를 일으킵니다.
+          </p>
+          <button onclick="switchTab('lec4')" class="mt-4 text-xs font-bold text-rose-800 hover:underline">→ 제4강에서 나이프 3요소와 테이퍼 텐션 자세히 보기</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 1: LECTURE 1 (OVEN) ==================== -->
+    <section id="tab-lec1" class="lecture-section hidden space-y-8">
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="border-l-4 border-amber-500 pl-4 py-1 bg-amber-50/60 rounded-r-xl mb-6">
+          <div class="text-xs font-bold text-amber-700 uppercase">Lecture 01 · Coater Dryer Engineering</div>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">[제1강] 전극 코터 오븐 구조 및 건조 메커니즘 완벽 해부</h2>
+          <p class="text-sm text-slate-700 mt-2 italic">
+            "슬러리를 기재 위에 예쁘게 올리는 것이 전반전이라면, 오븐에서 용매를 날려 접착력과 기공 구조를 완성하는 것은 승부처인 후반전입니다."
+          </p>
+        </div>
+
+        <!-- 1. Binder Migration -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-amber-600 text-white flex items-center justify-center text-sm">1</span>
+            왜 건조(Drying)가 그렇게 중요한가? : 바인더 마이그레이션 (Binder Migration)
+          </h3>
+          <p class="text-slate-700 text-sm leading-relaxed">
+            코팅 직후의 Wet 코팅층은 <strong>활물질 + 도전재 + 바인더 + 용매(양극: NMP, 음극: Water)</strong>가 섞여 있는 진흙 상태입니다. 오븐의 역할은 단순히 액체를 말리는 것이 아니라 <strong>전극의 미세구조(Micro-structure)를 고정(Fixing)</strong>하는 것입니다.
+          </p>
+          <div class="bg-rose-50 border border-rose-200 rounded-xl p-5">
+            <div class="font-bold text-rose-800 text-base mb-2">⚠️ 치명적 불량 메커니즘: 바인더 마이그레이션 (Binder Migration)</div>
+            <ul class="list-disc list-inside text-sm text-slate-700 space-y-1.5">
+              <li><strong>원인:</strong> 건조 속도가 너무 빠르면 표면 용매가 급격히 증발하면서, 바닥(집전체 계면)에 있던 용매가 <strong>모세관 현상(Capillary Force)</strong>을 타고 표면으로 강하게 끌려 올라옵니다. 이때 용매에 녹아있던 <strong>바인더(PVDF, SBR)와 가벼운 도전재까지 함께 표면으로 휩쓸려 올라갑니다.</strong></li>
+              <li><strong>치명적 결과 1 (박리, Delamination):</strong> 정작 집전체(Al/Cu박)와 활물질이 붙어야 할 바닥면에 바인더가 고갈되어 접착력(Adhesion)이 급락하고, 후공정(롤프레스/슬리팅)에서 전극이 우수수 떨어져 나갑니다.</li>
+              <li><strong>치명적 결과 2 (셀 저항 급증):</strong> 전극 표면에 절연체인 바인더가 과도하게 몰려 리튬이온과 전자의 이동 통로를 막습니다.</li>
+            </ul>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 2. Convection vs FIR -->
+        <div class="space-y-5">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-amber-600 text-white flex items-center justify-center text-sm">2</span>
+            열전달 방식의 이해: 대류(Convection) vs 원적외선 복사(FIR)
+          </h3>
+          <p class="text-slate-700 text-sm leading-relaxed">
+            현대 고속 코터 오븐은 열풍을 부는 <strong>대류 건조</strong>와 전자기파를 쏘는 <strong>원적외선 복사(FIR)</strong>를 결합한 <strong>하이브리드(Hybrid) 구조</strong>를 사용합니다.
+          </p>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Convection Card -->
+            <div class="border border-blue-200 bg-blue-50/40 rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-base font-extrabold text-blue-900">💨 ① 대류 건조 (Convection - 열풍 노즐 방식)</span>
+                <span class="text-xs px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full font-bold">표면 → 내부 가열</span>
+              </div>
+              <ul class="text-sm text-slate-700 space-y-2">
+                <li>• <strong>원리:</strong> 뜨거운 공기(Hot Air)를 노즐로 고속 분사하여 코팅 표면의 경계층(Boundary Layer)을 깨뜨려 열을 전달(열전달)하고, 증발된 용매 증기를 밖으로 쓸어냅니다(물질전달).</li>
+                <li>• <strong>장점:</strong> 온도 제어가 정밀하고 증발된 NMP/수분을 배기(Exhaust)하기에 필수적입니다.</li>
+                <li>• <strong>단점/한계:</strong> 열이 <strong>표면에서 내부로</strong> 들어갑니다. 무리하게 온도와 풍속을 높이면 겉만 먼저 말라 딱딱한 막을 형성하는 <strong>표면 피막(Skinning)</strong>이 생기고, 내부에 갇힌 용매가 끓어 터지면서 <strong>핀홀(Pinhole)</strong>이나 심한 <strong>바인더 마이그레이션</strong>을 일으킵니다.</li>
+              </ul>
+            </div>
+
+            <!-- FIR Card -->
+            <div class="border border-amber-300 bg-amber-50/50 rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-base font-extrabold text-amber-900">☀️ ② FIR 건조 (Far-Infrared - 원적외선 복사)</span>
+                <span class="text-xs px-2.5 py-1 bg-amber-200 text-amber-900 rounded-full font-bold">내부 + 표면 동시 발열</span>
+              </div>
+              <ul class="text-sm text-slate-700 space-y-2">
+                <li>• <strong>원리:</strong> 공기를 데우지 않고 원적외선 전자기파(파장 약 <strong>3~100μm</strong>)를 직접 코팅층에 쏩니다.</li>
+                <li>• <strong>왜 일반 IR(근적외선)이 아니라 FIR인가?</strong> 근적외선(NIR)은 반사율이 높은 금속 포일이나 검은 활물질 표면만 과열시킵니다. 반면 <strong>FIR 파장대는 물(H₂O), NMP 용매 분자 및 고분자 바인더의 고유 진동 흡수 파장대와 정확히 일치</strong>하여 코팅층 내부 깊숙이 침투해 분자 자체를 공명 진동시켜 <strong>내부에서부터 균일하게(Volumetric Heating)</strong> 열을 냅니다.</li>
+                <li>• <strong>현장 핵심 역할 (오븐 초입 Boosting):</strong> 코팅 직후 아직 묽은 슬러리에 바람(대류)을 세게 불면 물결무늬(풍자국, Air mark)가 납니다. 따라서 오븐 초입(Zone 1 전후)에 FIR을 설치해 <strong>바람 없이도 슬러리 온도를 증발 온도(잠열 구간)까지 순식간에 끌어올려 오븐 길이를 단축하고 생산 속도를 높입니다.</strong></li>
+                <li class="text-rose-700 font-semibold">• <strong>필수 인터록(Interlock):</strong> 라인 정지(Line Stop) 시 FIR이 켜져 있으면 기재가 즉시 타버리거나 단선(Web Break)되므로 즉각 전원 차단 및 셔터 닫힘 인터록이 작동해야 합니다.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 3. Hardware Structure: Roll Support vs Floating -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-amber-600 text-white flex items-center justify-center text-sm">3</span>
+            오븐 하드웨어 구조: 롤 서포트(Roll Support) vs 에어 플로팅(Air Floating)
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left border border-slate-200 rounded-xl overflow-hidden">
+              <thead class="bg-slate-100 text-slate-800 font-bold">
+                <tr>
+                  <th class="p-3.5 border-b">비교 항목</th>
+                  <th class="p-3.5 border-b">롤 서포트 방식 (Roll Support / Arch형)</th>
+                  <th class="p-3.5 border-b bg-blue-50 text-blue-900">에어 플로팅 방식 (Air Floating - 현재 주력)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr>
+                  <td class="p-3.5 font-semibold bg-slate-50">이송 원리</td>
+                  <td class="p-3.5">하부에 가이드 롤(Guide Roll)을 배치해 기재를 받쳐주며 이송 (상부 노즐만 분사)</td>
+                  <td class="p-3.5 bg-blue-50/20">상/하부 노즐에서 동시에 열풍을 분사하여 <strong>기재를 허공에 띄운 상태(비접촉 사인파 형태)</strong>로 이송</td>
+                </tr>
+                <tr>
+                  <td class="p-3.5 font-semibold bg-slate-50">장점</td>
+                  <td class="p-3.5">기재 주행 안정성이 높음</td>
+                  <td class="p-3.5 bg-blue-50/20">1. 상/하 동시 열풍으로 <strong>건조 효율 극대화 (고속 코팅 필수)</strong><br/>2. 롤 접촉에 의한 뒷면 찍힘/스크래치 원천 차단</td>
+                </tr>
+                <tr>
+                  <td class="p-3.5 font-semibold bg-slate-50">핵심 관리 포인트</td>
+                  <td class="p-3.5">가이드 롤 정렬(Alignment), 베어링 고착 및 롤 오염 관리</td>
+                  <td class="p-3.5 bg-blue-50/20"><strong>상/하부 노즐 풍압(풍속) 밸런스</strong> 및 웹 장력(Tension) 매칭 (밸런스 붕괴 시 기재가 출렁거리며 노즐에 닿는 <strong>Touch 스크래치</strong> 및 주름 발생)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 4. Drying 3 Stages & Interactive Zone Profile -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-amber-600 text-white flex items-center justify-center text-sm">4</span>
+            건조 3단계와 오븐 Zone별 온도/풍속 프로파일링 (실무 노하우)
+          </h3>
+          <p class="text-sm text-slate-700">
+            길이 30~60m에 달하는 오븐을 8~12개 이상의 독립된 Zone으로 쪼개 놓은 이유는 <strong>구간마다 슬러리의 물리적 상태가 완전히 다르기 때문</strong>입니다.
+          </p>
+
+          <!-- Visual Zone Profile Diagram -->
+          <div class="grid md:grid-cols-3 gap-4 my-4">
+            <div class="p-5 rounded-xl bg-sky-50 border border-sky-200">
+              <div class="text-xs font-bold text-sky-700 uppercase">Stage 1 · Zone 1 ~ 2</div>
+              <div class="text-lg font-extrabold text-slate-900 mt-1">① 예열 구간 (Pre-heating)</div>
+              <div class="mt-2 text-xs font-semibold text-sky-900 bg-sky-100 inline-block px-2.5 py-1 rounded">온도: 중/저온 (FIR 가동) | 풍속: 약풍</div>
+              <p class="text-sm text-slate-700 mt-3">
+                코팅 직후라 점도가 낮고 유동성이 큽니다. 바람을 세게 불면 슬러리가 밀려 <strong>풍자국(Air mark)</strong>이 남으므로, 풍속은 낮추고 <strong>FIR</strong>로 슬러리 온도를 증발 온도까지 부드럽게 끌어올립니다.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-xl bg-amber-50 border-2 border-amber-400 shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-800 uppercase">Stage 2 · Zone 3 ~ 6</span>
+                <span class="px-2 py-0.5 bg-rose-600 text-white text-[11px] font-bold rounded">⭐ 가장 중요!</span>
+              </div>
+              <div class="text-lg font-extrabold text-slate-900 mt-1">② 항률 건조 구간 (Constant-Rate)</div>
+              <div class="mt-2 text-xs font-semibold text-amber-900 bg-amber-200/70 inline-block px-2.5 py-1 rounded">온도: 적정 제어(과열 금지!) | 풍속: 중/강풍</div>
+              <p class="text-sm text-slate-700 mt-3">
+                <strong>전체 용매의 70~80%가 일정한 속도로 대량 증발</strong>하며 입자 골격이 확정되는 마의 구간입니다. 여기서 욕심내어 온도를 너무 높이면 <strong>바인더 마이그레이션</strong>이 폭발합니다. 접착력 확보를 위해 증발 속도를 임계치 이하로 정밀 제어해야 합니다.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-xl bg-rose-50 border border-rose-200">
+              <div class="text-xs font-bold text-rose-700 uppercase">Stage 3 · Zone 7 ~ 10(출구)</div>
+              <div class="text-lg font-extrabold text-slate-900 mt-1">③ 감률 건조 구간 (Falling-Rate)</div>
+              <div class="mt-2 text-xs font-semibold text-rose-900 bg-rose-100 inline-block px-2.5 py-1 rounded">온도: 고온(Max) | 풍속: 중풍</div>
+              <p class="text-sm text-slate-700 mt-3">
+                이미 전극 뼈대와 바인더 위치는 다 굳었습니다(고형화 완료). 이제 미세 기공(Pore) 깊숙이 숨어있는 <strong>잔류 용매(Residual NMP/수분)</strong>만 뽑아내면 되므로 마이그레이션 걱정 없이 <strong>온도를 높게 설정</strong>하여 완전 건조합니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- Cathode vs Anode Oven Diff -->
+          <div class="bg-slate-900 text-slate-100 rounded-xl p-5 mt-6">
+            <h4 class="font-bold text-amber-400 text-base mb-2">💡 양극(NMP) vs 음극(수계) 오븐 관리의 결정적 차이</h4>
+            <div class="grid md:grid-cols-2 gap-4 text-sm">
+              <div class="bg-white/5 p-3.5 rounded-lg border border-white/10">
+                <strong class="text-teal-300">• 양극 오븐 (NMP 유기용매): 폭발 하한계(LEL) & 회수</strong><br/>
+                NMP 증기는 인화성/폭발성이 있으므로 오븐 내 가스 농도가 <strong>폭발하한계(LEL, 약 1.3%)의 25% 이하</strong>로 유지되도록 급/배기 풍량 밸런스와 LEL 센서를 철저히 관리하며, 배기 가스는 NMP 회수 타워로 보내 재사용합니다.
+              </div>
+              <div class="bg-white/5 p-3.5 rounded-lg border border-white/10">
+                <strong class="text-blue-300">• 음극 오븐 (Water 수계): 4배 큰 증발 잠열 & 컬링/크랙</strong><br/>
+                폭발 위험은 없으나 <strong>물의 증발 잠열이 NMP보다 약 4배 이상 커서</strong> 훨씬 안 마릅니다. 건조 부하가 매우 크며, SBR 마이그레이션과 수축 스트레스에 의한 <strong>에지 크랙(Edge Crack) 및 말림(Curling)</strong> 관리가 핵심입니다.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: LECTURE 2 (MIXING) ==================== -->
+    <section id="tab-lec2" class="lecture-section hidden space-y-8">
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="border-l-4 border-teal-600 pl-4 py-1 bg-teal-50/60 rounded-r-xl mb-6">
+          <div class="text-xs font-bold text-teal-700 uppercase">Lecture 02 · Slurry Mixing & Rheology</div>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">[제2강] 배터리 전극 믹싱(Mixing) 공정 핵심 강의</h2>
+          <p class="text-sm text-slate-700 mt-2 italic">
+            "현장에서는 흔히 '코팅 불량의 80%는 믹싱에서 이미 결정되어 내려온다'고 말합니다. 분산이 안 된 슬러리는 어떤 명품 코터로도 구제할 수 없습니다."
+          </p>
+        </div>
+
+        <!-- 1. 4 Components -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center text-sm">1</span>
+            슬러리 4대 구성 요소와 양극/음극 레시피 비교
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left border border-slate-200 rounded-xl overflow-hidden">
+              <thead class="bg-slate-100 text-slate-800 font-bold">
+                <tr>
+                  <th class="p-3.5 border-b">구성 요소</th>
+                  <th class="p-3.5 border-b">핵심 역할</th>
+                  <th class="p-3.5 border-b bg-teal-50 text-teal-900">양극 (Cathode - 유계 슬러리)</th>
+                  <th class="p-3.5 border-b bg-blue-50 text-blue-900">음극 (Anode - 수계 슬러리)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr>
+                  <td class="p-3.5 font-bold bg-slate-50">활물질 (Active Material)</td>
+                  <td class="p-3.5">리튬이온 저장/방출 주원료 (94~98%)</td>
+                  <td class="p-3.5">NCM, NCA, LFP, LCO 등</td>
+                  <td class="p-3.5">천연흑연, 인조흑연, 실리콘(Si/SiOx)</td>
+                </tr>
+                <tr>
+                  <td class="p-3.5 font-bold bg-slate-50">도전재 (Conductive)</td>
+                  <td class="p-3.5">활물질 사이 전자 이동 통로 형성</td>
+                  <td class="p-3.5">카본블랙(Super-P), <strong>CNT(탄소나노튜브)</strong></td>
+                  <td class="p-3.5">카본블랙, 소량의 SWCNT/MWCNT</td>
+                </tr>
+                <tr>
+                  <td class="p-3.5 font-bold bg-slate-50">바인더 (Binder)</td>
+                  <td class="p-3.5">입자 간 결착(Cohesion) & 기재 접착(Adhesion)</td>
+                  <td class="p-3.5"><strong>PVDF</strong> (유기용매 용해형 고분자)</td>
+                  <td class="p-3.5"><strong>SBR</strong> (고무 라텍스 에멀젼 입자)</td>
+                </tr>
+                <tr>
+                  <td class="p-3.5 font-bold bg-slate-50">증점제 / 분산제</td>
+                  <td class="p-3.5">점도 부여(침강 방지) 및 입자 분산 보조</td>
+                  <td class="p-3.5">HNBR 등 고분자 분산제 (CNT 선분산용)</td>
+                  <td class="p-3.5"><strong>CMC</strong> (친수화 분산 + 점도 형성 필수)</td>
+                </tr>
+                <tr>
+                  <td class="p-3.5 font-bold bg-slate-50">용매 (Solvent)</td>
+                  <td class="p-3.5">분산 매개체 (코팅 오븐에서 100% 증발)</td>
+                  <td class="p-3.5"><strong>NMP</strong> (N-Methyl-2-pyrrolidone)</td>
+                  <td class="p-3.5"><strong>DI Water</strong> (초순수 물)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 2. Kneading Secret -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center text-sm">2</span>
+            왜 한 번에 다 넣고 안 섞을까? : 고점도 혼련(Kneading)의 비밀
+          </h3>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            수제비 반죽을 할 때 처음부터 물을 한강처럼 붓고 휘저으면 밀가루가 뭉쳐서(더마, Agglomerate) 절대 풀리지 않습니다. <strong>물을 아주 조금만 넣고 뻑뻑한 상태에서 손으로 세게 치대야(반죽) 덩어리가 깨집니다.</strong> 전극 믹싱도 똑같습니다!
+          </p>
+
+          <div class="my-4 bg-slate-50 p-4 rounded-xl border border-slate-200 overflow-x-auto">
+            <div class="mermaid">
+flowchart LR
+    S1["<b>1. 건식 혼합 (Dry Mixing)</b><br/>활물질 + 도전재 파우더<br/>초기 균일 혼합"] 
+    --> S2["<b>2. 고점도 혼련 (Kneading) ⭐핵심</b><br/>소량의 용매/바인더만 투입 (고형분 극대화)<br/>강력한 전단 응력(Shear Stress)으로 응집체 파괴!"] 
+    --> S3["<b>3. 희석 분산 (Dilution)</b><br/>나머지 용매 및 바인더 투입<br/>코팅 목표 점도 및 고형분 맞춤"] 
+    --> S4["<b>4. 진공 탈포 & 필터링</b><br/>미세 기포 제거 (핀홀 방지)<br/>철분(자석) 및 거대 입자(Mesh) 제거"]
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-teal-50 border border-teal-200">
+              <div class="font-bold text-teal-900 text-sm">🌀 플래니터리 블레이드 (Planetary Blade - 저속 자전/공전)</div>
+              <p class="text-xs text-slate-700 mt-1 leading-relaxed">
+                꾀배기(Twisted) 또는 프레임 모양의 큰 날개가 탱크 전체를 공전하며 동시에 자전합니다. 탱크 벽면의 데드존(Dead Zone) 없이 슬러리를 긁어내며 <strong>거시적 혼합(Macro-mixing)과 고점도 반죽(Kneading)</strong>을 담당합니다.
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-teal-50 border border-teal-200">
+              <div class="font-bold text-teal-900 text-sm">⚡ 하이스피드 디졸버 (High-Speed Homo Disper - 고속 회전)</div>
+              <p class="text-xs text-slate-700 mt-1 leading-relaxed">
+                톱니 모양의 원판 날개가 분당 수천 RPM으로 초고속 회전하며 강력한 국부 전단력(Shear)과 충격파를 만들어 뭉친 도전재/활물질을 쪼개는 <strong>미시적 분산(Micro-dispersion)</strong>을 담당합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 3. Critical Troubleshooting in Mixing -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center text-sm">3</span>
+            양극 vs 음극 믹싱 현장의 치명적 사고와 철칙
+          </h3>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="p-5 rounded-xl bg-rose-50 border border-rose-200">
+              <div class="text-base font-extrabold text-rose-900 mb-2">🚨 양극(Cathode)의 재앙: 수분 유입과 겔화(Gelation)</div>
+              <p class="text-sm text-slate-700 leading-relaxed">
+                하이니켈(High-Ni NCM) 양극재는 수분과 만나면 잔류 리튬이 반응해 강한 염기성(높은 pH)을 띱니다. 이 높은 pH와 수분이 <strong>PVDF 바인더 사슬을 공격(탈불소화 가교 반응)</strong>하면, 슬러리가 순두부나 젤리처럼 굳어버리는 <strong>겔화(Gelation)</strong>가 일어납니다.<br/>
+                <span class="font-bold text-rose-700">→ 대책:</span> 양극 믹싱룸의 철저한 노점(Dew Point, Dry Room) 관리 및 원재료 수분 관리가 필수입니다.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-xl bg-blue-50 border border-blue-200">
+              <div class="text-base font-extrabold text-blue-900 mb-2">🛡️ 음극(Anode)의 철칙: SBR 바인더는 맨 마지막에 살살!</div>
+              <p class="text-sm text-slate-700 leading-relaxed">
+                흑연은 물과 안 친한 소수성이므로 먼저 <strong>CMC 수용액</strong>과 함께 강하게 고점도 반죽(Kneading)하여 표면을 친수화시키고 분산을 끝내야 합니다.<br/>
+                반면 접착제인 <strong>SBR은 고무 라텍스 입자(에멀젼)</strong>입니다. SBR을 처음부터 넣고 고속 디졸버로 강하게 때리면(High Shear) 고무 입자가 터져서 떡처럼 뭉쳐버립니다.<br/>
+                <span class="font-bold text-blue-800">→ 대책:</span> <strong>SBR은 반드시 믹싱 맨 마지막 단계에 투입하여 저속으로 짧게</strong> 섞어주어야 접착력이 살아납니다!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 4. Slurry QC 3 Metrics -->
+        <div class="space-y-3">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center text-sm">4</span>
+            코터로 이송 전 반드시 확인하는 3대 슬러리 품질 지표 (QC)
+          </h3>
+          <div class="grid md:grid-cols-3 gap-4 text-sm">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="font-bold text-slate-900">① 고형분 (Solid Content, %)</div>
+              <p class="text-slate-600 mt-1 text-xs leading-relaxed">
+                전체 슬러리 무게 중 용매를 뺀 고체 비율입니다. 고형분이 흔들리면 코터에서 같은 갭(Gap)으로 발라도 건조 후 <strong>로딩량(Loading Level, 단위면적당 무게)</strong>이 다 틀어집니다.
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="font-bold text-slate-900">② 점도 & 전단 박화 (Shear Thinning)</div>
+              <p class="text-slate-600 mt-1 text-xs leading-relaxed">
+                저장 탱크에 가만히 있을 땐 점도가 높아 입자가 안 가라앉고(침강 방지), 코터 다이 립의 좁은 틈을 빠져나갈 때(고전단)는 점도가 뚝 떨어져 매끄럽게 발리는 <strong>요변성(Thixotropy)</strong>이 핵심입니다.
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="font-bold text-slate-900">③ 입도(Grind Gauge) & 필터링</div>
+              <p class="text-slate-600 mt-1 text-xs leading-relaxed">
+                <strong>마그네틱 필터</strong>로 철분(Fe)을 잡고, <strong>메쉬 필터</strong>로 거대 응집체를 걸러내야 다이 립 막힘에 의한 코팅 줄무늬(Scratch)와 셀 내부 단락을 막을 수 있습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: LECTURE 3 (ROLL PRESS) ==================== -->
+    <section id="tab-lec3" class="lecture-section hidden space-y-8">
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="border-l-4 border-blue-600 pl-4 py-1 bg-blue-50/60 rounded-r-xl mb-6">
+          <div class="text-xs font-bold text-blue-700 uppercase">Lecture 03 · Roll Pressing / Calendering</div>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">[제3강] 롤프레스(Roll Press) 공정 핵심 강의</h2>
+          <p class="text-sm text-slate-700 mt-2 italic">
+            "건조 직후 기공률 50% 이상의 폭신한 스펀지 같은 전극을 거대한 두 강철 롤로 짓눌러(기공률 20~30%), 배터리의 에너지 밀도와 출력 특성을 완성하는 심장부입니다."
+          </p>
+        </div>
+
+        <!-- 1. Trade-off of Pressing -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center text-sm">1</span>
+            압연(Calendering)의 목적과 과압연(Over-pressing)의 딜레마
+          </h3>
+          <div class="grid md:grid-cols-3 gap-4 text-sm">
+            <div class="p-4 rounded-xl bg-slate-100 border border-slate-200">
+              <div class="font-bold text-slate-700">📉 너무 약하게 누르면 (저밀도)</div>
+              <ul class="mt-2 space-y-1 text-xs text-slate-600 list-disc list-inside">
+                <li>부피당 활물질 양 부족 → <strong>용량 미달</strong></li>
+                <li>입자 간 접촉 불량 → <strong>전기 저항 증가</strong></li>
+                <li>집전체와 합제층 간 접착력 부족</li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-xl bg-emerald-50 border-2 border-emerald-400">
+              <div class="font-bold text-emerald-900">🎯 적정 압연 (Target 기공률 20~30%)</div>
+              <ul class="mt-2 space-y-1 text-xs text-slate-700 list-disc list-inside">
+                <li><strong>최적의 부피당 에너지 밀도($g/cm^3$) 달성</strong></li>
+                <li>활물질-도전재-집전체 전기 전도성 극대화</li>
+                <li>전해액이 스며들 최적의 기공 통로 확보</li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-xl bg-rose-50 border border-rose-200">
+              <div class="font-bold text-rose-800">💥 너무 세게 누르면 (과압연 불량)</div>
+              <ul class="mt-2 space-y-1 text-xs text-slate-700 list-disc list-inside">
+                <li><strong>활물질 입자 깨짐(Cracking)</strong> → 부반응/가스/수명 급락</li>
+                <li><strong>기공 막힘(Pore Closing)</strong> → 전해액 함침 불량 & 리튬 석출(Dendrite)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 2. Spring-back & Hot Press -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center text-sm">2</span>
+            핵심 물리 현상 ①: 스프링백(Spring-back)과 승온 프레스(Hot Press)
+          </h3>
+          <div class="bg-blue-50/50 border border-blue-200 rounded-xl p-5 text-sm space-y-2">
+            <p class="text-slate-700">
+              • <strong>스프링백(Spring-back, 탄성 복원) 현상:</strong> 목표 두께가 $100\mu m$라고 해서 롤 간격(Gap)을 $100\mu m$로 맞추고 누르면, 롤을 빠져나온 직후 전극 두께가 $105 \sim 115\mu m$로 다시 부풀어 오릅니다. 활물질 입자와 고분자 바인더(특히 고무 성질인 음극 SBR)의 <strong>탄성(Elasticity)</strong> 때문입니다.
+            </p>
+            <p class="text-slate-800 font-semibold">
+              • 💡 해결책 — 승온 롤프레스 (Hot / Warm Roll Press): 프레스 롤 내부에 열매체유나 유도 가열 코일을 넣어 롤 표면을 <strong>$60 \sim 120^\circ C$로 가열</strong>하여 누릅니다. 바인더가 부드럽게 연화(Softening)되어 소성 변형이 잘 일어나므로, <strong>더 낮은 압력으로도 목표 두께가 쉽게 찍히고 스프링백과 입자 깨짐이 획기적으로 줄어듭니다!</strong>
+            </p>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 3. Roll Bending & Crown/Bender -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center text-sm">3</span>
+            핵심 물리 현상 ②: 롤 벤딩(Roll Bending)과 크라운/벤더 제어
+          </h3>
+          <p class="text-sm text-slate-700">
+            수백 톤의 힘으로 롤 양 끝단 베어링 축을 누르면, 강철 롤의 가운데(Center)가 위아래로 활처럼 휘어져 벌어집니다. 이대로 누르면 <strong>전극 양 가장자리(Edge)만 얇게 과압연되고, 한가운데(Center)는 두껍게 남는 폭 방향(TD) 두께 편차</strong>가 발생합니다.
+          </p>
+          <div class="my-4 bg-slate-50 p-4 rounded-xl border border-slate-200 overflow-x-auto">
+            <div class="mermaid">
+flowchart TD
+    A["양 끝단 유압 실린더로 수백 톤 가압"] --> B["롤 벤딩 (Roll Bending): 롤 중심부가 위아래로 벌어짐"]
+    B --> C["불량: 가장자리(Edge)는 얇고 중심부(Center)는 두꺼운 TD 편차 발생"]
+    C --> D["해결 1: 크라운 롤 (Crown Roll)<br/>롤 중심부 직경을 수~수십 μm 볼록하게 연마"]
+    C --> E["해결 2: 유압 롤 벤더 (Hydraulic Bender)<br/>롤 축 끝단을 역방향 모멘트로 꺾어 휨 상쇄"]
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 4. Edge Wave & Camber -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center text-sm">4</span>
+            핵심 물리 현상 ③: 무지부 웨이브(Edge Wave)와 캠버(Camber)
+          </h3>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="p-5 rounded-xl bg-amber-50 border border-amber-200">
+              <div class="text-base font-extrabold text-amber-900 mb-2">🌊 무지부 웨이브 (Edge Wave) & 파단</div>
+              <p class="text-sm text-slate-700 leading-relaxed">
+                <strong>원인:</strong> 두꺼운 코팅부는 롤에 짓눌려 진행 방향(MD)으로 길게 늘어납니다(연신, Elongation). 반면 코팅이 안 된 옆쪽 얇은 포일(<strong>무지부, Foil</strong>)은 롤에 안 눌리므로 전혀 늘어나지 않습니다.<br/>
+                <strong>결과:</strong> 늘어난 코팅부와 안 늘어난 무지부 경계에서 극심한 스트레스 차이가 생겨 치마처럼 우글쭈글하게 우는 <strong>웨이브(Wave)</strong>가 발생하고 심하면 무지부가 찢어집니다.<br/>
+                <span class="font-bold text-amber-900">→ 대책:</span> 프레스 직후 <strong>무지부 연신기(고주파 유도 가열 Induction Heater 또는 연신 롤)</strong>로 무지부만 열을 가해 강제로 늘려주어 코팅부와 길이를 맞춰줍니다.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-xl bg-indigo-50 border border-indigo-200">
+              <div class="text-base font-extrabold text-indigo-900 mb-2">🍌 캠버 (Camber - 바나나 휨/사행)</div>
+              <p class="text-sm text-slate-700 leading-relaxed">
+                <strong>원인:</strong> 프레스 롤의 좌측(WS)과 우측(DS) 압력이 미세하게 다르거나 코팅 로딩량 좌우 편차가 넘어온 경우, 더 세게 눌린 쪽이 더 길게 늘어납니다.<br/>
+                <strong>결과:</strong> 전극이 똑바로 주행하지 못하고 바나나처럼 한쪽으로 휘어지며, 다음 공정인 슬리팅에서 폭 치수가 다 틀어집니다.<br/>
+                <span class="font-bold text-indigo-900">→ 대책:</span> 후단 두께 측정기 데이터를 피드백 받아 좌/우 유압 실린더 압력을 독립적으로 자동 보정(AGC)합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: LECTURE 4 (SLITTING) ==================== -->
+    <section id="tab-lec4" class="lecture-section hidden space-y-8">
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="border-l-4 border-rose-600 pl-4 py-1 bg-rose-50/60 rounded-r-xl mb-6">
+          <div class="text-xs font-bold text-rose-700 uppercase">Lecture 04 · Slitting & Winding Control</div>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">[제4강] 슬리팅(Slitting) 공정 핵심 강의</h2>
+          <p class="text-sm text-slate-700 mt-2 italic">
+            "절단면에서 발생하는 단 하나의 미세한 금속 가시(Burr)가 분리막을 뚫고 배터리 화재를 일으킵니다. 칼날 세팅과 권취 텐션 제어의 정수를 다룹니다."
+          </p>
+        </div>
+
+        <!-- 1. Rotary Shear Cut 3 Parameters -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-rose-600 text-white flex items-center justify-center text-sm">1</span>
+            회전식 전단 절단(Rotary Shear Cut)과 나이프 세팅 3요소
+          </h3>
+          <p class="text-sm text-slate-700">
+            배터리 전극은 면도날로 베는 방식이 아니라, 가위로 종이를 자르듯 <strong>상부 원형 나이프(Upper Male Knife)와 하부 원형 나이프(Lower Female Knife)가 맞물려 돌아가며 전단 응력(Shear Stress)으로 자르는 방식</strong>을 씁니다.
+          </p>
+          <div class="grid md:grid-cols-3 gap-4 text-sm">
+            <div class="p-4 rounded-xl bg-rose-50/60 border border-rose-200">
+              <div class="font-bold text-rose-900">① 오버랩 (Overlap - 상하 겹침량)</div>
+              <p class="text-xs text-slate-700 mt-1.5 leading-relaxed">
+                상부 칼날이 하부 칼날 아래로 내려와 겹치는 깊이(수백 $\mu m$).<br/>
+                • <strong>너무 얕으면:</strong> 덜 잘리고 뜯겨 나가며 거대한 <strong>Burr</strong> 발생.<br/>
+                • <strong>너무 깊으면:</strong> 칼날 마모 급증 및 절단면이 꺾이는 <strong>Curling/Crack</strong> 발생.
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-rose-50/60 border border-rose-200">
+              <div class="font-bold text-rose-900">② 클리어런스 / 측압 (Side Force)</div>
+              <p class="text-xs text-slate-700 mt-1.5 leading-relaxed">
+                상하 칼날 측면이 서로 밀착하는 힘입니다. 공압이나 스프링으로 일정한 측압을 유지해 주어야 가위 날이 벌어지지 않고 깔끔한 전단이 일어납니다.
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-rose-50/60 border border-rose-200">
+              <div class="font-bold text-rose-900">③ 캔트 앵글 (Cant / Toe-in Angle)</div>
+              <p class="text-xs text-slate-700 mt-1.5 leading-relaxed">
+                상부 칼날을 진행 방향에 대해 약 <strong>$0.1^\circ \sim 0.5^\circ$</strong> 비스듬히 기울여 세팅하여, 면 접촉이 아닌 <strong>절단점(Point Contact)</strong>에서만 하부 칼날과 만나도록 하는 정밀 각도입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 2. Metal Burr & Separator Short -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-rose-600 text-white flex items-center justify-center text-sm">2</span>
+            슬리팅 최대의 적: 금속 버(Metal Burr)와 내부 단락(화재)
+          </h3>
+          <div class="bg-rose-950 text-rose-50 rounded-xl p-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="space-y-2">
+                <div class="inline-block px-2.5 py-0.5 rounded bg-rose-600 text-white text-xs font-bold">CRITICAL SAFETY ISSUE</div>
+                <h4 class="text-lg font-extrabold text-white">왜 절단면 Burr 높이를 5~10μm 이하로 목숨 걸고 관리하는가?</h4>
+                <p class="text-sm text-rose-100 leading-relaxed">
+                  칼날이 마모되거나 오버랩/측압이 틀어지면 알루미늄(Al)이나 구리(Cu) 포일이 잘릴 때 길게 늘어지면서 뾰족한 <strong>금속 가시(Burr)</strong>가 튀어나옵니다.<br/>
+                  배터리 셀 조립 시 양극과 음극 사이에 들어가는 <strong>분리막(Separator)의 두께는 고작 10~15μm</strong>입니다! 만약 15μm가 넘는 Burr가 있으면 권취/적층 압력을 받을 때 분리막을 그대로 찔러 관통하여 <strong>내부 단락(Internal Short) → 전압 강하 불량 → 열폭주(화재)</strong>로 직결됩니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-8 border-slate-200" />
+
+        <!-- 3. Winding: Friction Shaft & Taper Tension -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-rose-600 text-white flex items-center justify-center text-sm">3</span>
+            권취(Rewinding)의 고난도 기술: 프리크션 샤프트 & 테이퍼 텐션
+          </h3>
+
+          <div class="my-4 bg-slate-50 p-4 rounded-xl border border-slate-200 overflow-x-auto">
+            <div class="mermaid">
+flowchart LR
+    A["<b>일정 장력 권취 (Constant Tension)</b><br/>외곽 레이어가 안쪽을 누적해서 꽉 조임"] 
+    --> B["<b>치명적 권취 불량 발생!</b><br/>1. 코어 찌그러짐 & 별 모양 변형 (Star Defect)<br/>2. 죽순 현상 (Telescoping - 옆으로 밀려나옴)"]
+    
+    C["<b>테이퍼 텐션 제어 (Taper Tension) ⭐필수</b><br/>권취 롤 직경(Diameter)이 커질수록<br/>장력을 점진적으로 낮춤 (예: 15~30% 감소)"] 
+    --> D["<b>완벽한 팬케이크(Slit Roll) 완성!</b><br/>내권부부터 외권부까지 균일한 권취 경도 유지"]
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 text-sm">
+            <div class="p-5 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="font-bold text-slate-900 text-base">⚙️ 프리크션 샤프트 (Friction Shaft / 차동축)</div>
+              <p class="text-slate-700 mt-2 leading-relaxed">
+                광폭 롤 하나를 4~8갈래로 자르면 미세한 두께 편차 때문에 <strong>각 갈래(Lane)마다 감기는 롤의 직경이 조금씩 달라집니다.</strong> 일반 통축으로 감으면 두꺼운 쪽은 팽팽해져 터지고 얇은 쪽은 헐거워져 주름이 집니다. 따라서 각 코어 링이 개별적으로 슬립(Slip)하며 <strong>모든 레인에 동일한 장력을 독립 부여하는 차동축</strong>이 필수입니다.
+              </p>
+            </div>
+            <div class="p-5 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="font-bold text-slate-900 text-base">📉 테이퍼 텐션 제어 (Taper Tension Control)</div>
+              <p class="text-slate-700 mt-2 leading-relaxed">
+                코어에 처음 감기 시작할 때(내권부)는 높은 장력으로 단단히 감아 옆으로 빠지는 <strong>죽순 현상(Telescoping)</strong>을 막고, 롤이 감겨 직경이 커질수록(외권부) 장력을 서서히 줄여주어 바깥쪽 전극이 안쪽을 조여 찌그러뜨리는 <strong>스타 디펙트(Star Defect)</strong>를 방지합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: TROUBLESHOOTING & QUIZ ==================== -->
+    <section id="tab-quiz" class="lecture-section hidden space-y-8">
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">Interactive Self-Check</span>
+        <h2 class="text-2xl font-extrabold text-slate-900 mt-2">현장 엔지니어 실전 트러블슈팅 진단 & 퀴즈</h2>
+        <p class="text-sm text-slate-600 mt-1">배운 내용을 바탕으로 현장 불량 상황의 원인과 해결책을 점검해 보세요. (질문을 클릭하면 정답과 해설이 열립니다)</p>
+
+        <div class="space-y-4 mt-6">
+          <details class="group bg-slate-50 border border-slate-200 rounded-xl p-5 cursor-pointer">
+            <summary class="font-bold text-slate-900 flex items-center justify-between">
+              <span>Q1. 코터 생산 속도를 높이려고 오븐 중반부(Zone 3~5) 열풍 온도와 풍속을 대폭 올렸더니, 롤프레스에서 전극이 포일에서 다 벗겨지는(박리) 사고가 났습니다. 원인과 대책은?</span>
+              <span class="text-blue-600 text-sm group-open:rotate-180 transition">▼ 정답 보기</span>
+            </summary>
+            <div class="mt-4 pt-3 border-t border-slate-200 text-sm text-slate-700 space-y-1.5">
+              <p><strong class="text-rose-600">• 원인 (바인더 마이그레이션):</strong> 용매의 70~80%가 날아가는 <strong>항률 건조 구간(중반부 Zone)</strong>에서 증발 속도가 임계치를 넘어, 바닥(집전체 계면)에 있어야 할 바인더가 용매 모세관 흐름을 타고 표면으로 다 떠올라 버렸기 때문입니다.</p>
+              <p><strong class="text-blue-700">• 해결책:</strong> 초입(예열 구간)에는 <strong>FIR</strong>을 활용해 내부 온도를 빠르게 올려주고, <strong>항률 건조 구간(Zone 3~6)의 온도와 풍속은 적절히 낮춰 마이그레이션을 억제한 뒤</strong>, 골격이 다 굳은 후반부(감률 구간) 온도를 높여 잔류 용매를 제거해야 합니다.</p>
+            </div>
+          </details>
+
+          <details class="group bg-slate-50 border border-slate-200 rounded-xl p-5 cursor-pointer">
+            <summary class="font-bold text-slate-900 flex items-center justify-between">
+              <span>Q2. 음극(수계) 슬러리 믹싱 시간을 단축하려고 흑연, CMC, SBR 바인더를 처음부터 한꺼번에 넣고 고속 디졸버(Homo Disper)로 강하게 돌렸더니 접착력이 0에 가깝게 나왔습니다. 왜 그럴까요?</span>
+              <span class="text-blue-600 text-sm group-open:rotate-180 transition">▼ 정답 보기</span>
+            </summary>
+            <div class="mt-4 pt-3 border-t border-slate-200 text-sm text-slate-700 space-y-1.5">
+              <p><strong class="text-rose-600">• 원인 (SBR 에멀젼 파괴):</strong> 음극 접착제인 <strong>SBR은 고무 라텍스 입자 형태</strong>입니다. 고점도 반죽이나 고속 전단력(High Shear)에 장시간 노출되면 고무 입자 보호막이 깨져 자기들끼리 떡처럼 뭉쳐버려(기계적 응집) 접착력을 완전히 잃습니다.</p>
+              <p><strong class="text-blue-700">• 해결책:</strong> 먼저 <strong>흑연 + 도전재 + CMC 수용액</strong>만으로 강하게 고점도 혼련(Kneading) 및 분산을 완료한 후, <strong>공정 맨 마지막에 SBR을 투입하여 저속으로 짧게</strong> 섞어주어야 합니다.</p>
+            </div>
+          </details>
+
+          <details class="group bg-slate-50 border border-slate-200 rounded-xl p-5 cursor-pointer">
+            <summary class="font-bold text-slate-900 flex items-center justify-between">
+              <span>Q3. 롤프레스 후 전극 폭 방향(TD) 두께를 재보니 양쪽 가장자리는 목표보다 얇고 가운데는 두껍게 나왔으며, 무지부 경계가 치마처럼 우글거립니다(Wave). 어떻게 잡아야 합니까?</span>
+              <span class="text-blue-600 text-sm group-open:rotate-180 transition">▼ 정답 보기</span>
+            </summary>
+            <div class="mt-4 pt-3 border-t border-slate-200 text-sm text-slate-700 space-y-1.5">
+              <p><strong class="text-rose-600">• 원인:</strong> ① 가운데가 두꺼운 것은 강한 압력으로 프레스 롤 중심부가 휘어지는 <strong>롤 벤딩(Roll Bending)</strong> 때문이며, ② 무지부가 우는 것은 눌려서 늘어난 코팅부와 안 눌려서 안 늘어난 무지부 사이의 <strong>연신율(길이) 차이</strong> 때문입니다.</p>
+              <p><strong class="text-blue-700">• 해결책:</strong> ① <strong>유압 롤 벤더(Roll Bender)</strong> 압력을 조정하거나 적정 <strong>크라운 롤(Crown Roll)</strong>을 적용해 폭 방향 압력을 평탄화하고, ② <strong>무지부 가열/연신기(Induction Heater)</strong>를 가동해 무지부를 늘려 코팅부와 길이를 맞춰줍니다.</p>
+            </div>
+          </details>
+
+          <details class="group bg-slate-50 border border-slate-200 rounded-xl p-5 cursor-pointer">
+            <summary class="font-bold text-slate-900 flex items-center justify-between">
+              <span>Q4. 슬리팅 후 권취된 팬케이크 롤(Slit Roll)의 코어 부근 안쪽 전극이 별 모양으로 찌그러져(Star Defect) 전량 폐기했습니다. 텐션 세팅을 어떻게 바꿔야 하나요?</span>
+              <span class="text-blue-600 text-sm group-open:rotate-180 transition">▼ 정답 보기</span>
+            </summary>
+            <div class="mt-4 pt-3 border-t border-slate-200 text-sm text-slate-700 space-y-1.5">
+              <p><strong class="text-rose-600">• 원인:</strong> 처음부터 끝까지 똑같은 장력(Constant Tension)으로 감았기 때문에 외곽에 감기는 수백 겹의 전극이 안쪽 레이어를 누적해서 조였기 때문입니다.</p>
+              <p><strong class="text-blue-700">• 해결책:</strong> 롤 직경이 커질수록 권취 장력을 점진적으로 낮춰주는(예: 15~30% 감소) <strong>테이퍼 텐션(Taper Tension) 프로파일</strong>을 적용해야 합니다.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 text-xs py-6 px-4 border-t border-slate-800 no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>📘 <strong>배터리 전극 4대 공정 마스터 클래스</strong> | 작업폴더: <code>C:\Work\강의노트_배터리전극\result\261018_v1.0</code></div>
+      <div>Antigravity (AGY) Engineering Lecture Dashboard · Powered by GitHub Pages</div>
+    </div>
+  </footer>
+
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose' });
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.lecture-section').forEach(sec => sec.classList.add('hidden'));
+      const target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      // Re-render mermaid diagrams inside newly visible tab if needed
+      mermaid.run();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function expandAllAndPrint() {
+      document.querySelectorAll('details').forEach(d => d.setAttribute('open', 'true'));
+      window.print();
+    }
+
+    function handleSearch(keyword) {
+      const q = keyword.trim().toLowerCase();
+      if (!q) return;
+
+      // Find first section containing the keyword and switch to it
+      const sections = ['lec1', 'lec2', 'lec3', 'lec4', 'overview', 'quiz'];
+      for (const id of sections) {
+        const el = document.getElementById('tab-' + id);
+        if (el && el.innerText.toLowerCase().includes(q)) {
+          switchTab(id);
+          break;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
